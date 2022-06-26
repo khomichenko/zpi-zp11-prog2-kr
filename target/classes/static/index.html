@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Гаманець. Керування власним бюджетом та фінансами. | v 0.0001b</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.js" ></script>
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="container pt-4" id="app">
+        <h4>
+            <img src="images/VideViLogo.png" width="26"/>
+            Мій Гаманець, мої фінанси
+        </h4>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingUsers">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                            Користувачі
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseUsers" class="collapse show" aria-labelledby="headingUsers" data-parent="#accordion">
+                    <div class="card-body">
+                        <table class="table table-hover table-sm small">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Логін</th>
+                                    <th scope="col">Прізвище, ім'я та по батькові</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(x, index) in users">
+                                    <th scope="row">{{x.id}}</th>
+                                    <td>{{x.userName}}</td>
+                                    <td>{{x.fio}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingAccounts">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseAccounts" aria-expanded="true" aria-controls="collapseAccounts">
+                            Рахунки
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseAccounts" class="collapse" aria-labelledby="headingAccounts" data-parent="#accordion">
+                    <div class="card-body">
+                        <table class="table table-hover table-sm small">
+                            <thead>
+                            <tr>
+                                <th scope="col">Номер</th>
+                                <th scope="col">Власник (ПІБ)</th>
+                                <th scope="col">Статті</th>
+                                <th scope="col">Баланс</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(x, index) in accounts">
+                                <th scope="row">{{x.id}}</th>
+                                <td>{{x.user.fio}}</td>
+                                <td>
+                                    <div v-for="c in x.clauses">{{c.description}}</div>
+                                </td>
+                                <td>{{x.amount}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTransactions">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTransactions" aria-expanded="true" aria-controls="collapseTransactions">
+                            Трансакції
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTransactions" class="collapse" aria-labelledby="headingTransactions" data-parent="#accordion">
+                    <div class="card-body">
+                        <table class="table table-hover table-sm small">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Дата</th>
+                                <th scope="col">Від</th>
+                                <th scope="col">Статті</th>
+                                <th scope="col">До</th>
+                                <th scope="col">Сума</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(x, index) in transactions">
+                                <th scope="row">{{x.id}}</th>
+                                <td>
+                                    <div>{{x.timestamp}}</div>
+                                </td>
+                                <td>
+                                    <div>{{x.from.id}}</div>
+                                    <div>({{x.from.user.fio}})</div>
+                                <td>
+                                    <div>{{x.clause.id}}</div>
+                                    <div>({{x.clause.description}})</div>
+                                </td>
+                                <td>
+                                    <div>{{x.to.id}}</div>
+                                    <div>({{x.to.user.fio}})</div>
+                                </td>
+                                <td>
+                                    <div>{{x.amount}}</div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript">
+        new Vue({
+            el: '#app',
+            methods: {
+                getAccountsFromApi() {
+                    axios.get("http://localhost:8081/accounts/list",{
+                        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',}
+                    }).then(r => {
+                        this.accounts = r.data
+                    });
+                },
+                getUsersFromApi() {
+                    axios.get("http://localhost:8081/users/list",{
+                        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',}
+                    }).then(r => {
+                        this.users = r.data
+                    });
+                },
+                getTransactionFromApi() {
+                    axios.get("http://localhost:8081/transactions/list",{
+                        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',}
+                    }).then(r => {
+                        this.transactions = r.data
+                    });
+                }
+            },
+            data: {
+                users: [],
+                accounts: [],
+                transactions: []
+            },
+            created() {
+                this.getUsersFromApi()
+                this.getAccountsFromApi()
+                this.getTransactionFromApi()
+            },
+        });
+    </script>
+</body>
+</html>
